@@ -1,0 +1,166 @@
+INSERT INTO Office (Onumber, Oname, Country)
+VALUES
+(45, 'Prem_Office', 'Nepal'),
+(46, 'Prem_Ncell_40', 'Nepal'),
+(47, 'google_Office', 'India'),
+(48, 'youtube_Office', 'USA'),
+(49, 'viber_Office', 'UK');
+
+
+INSERT INTO Employee (Ename, Gender, Bdate, Address, Salary, Ono, Years_of_experience)
+VALUES
+('Pushpa', 'M', '2003-05-15', 'Kathmandu', 40000.00, 6, 2),
+('rita', 'F', '1999-11-21', 'Pokhara', 30000.00, 7, 3),
+('Ramesh', 'M', '1995-02-09', 'Butwal', 50000.00, 8, 6),
+('Anita', 'F', '2000-08-13', 'Biratnagar', 42000.00, 9, 4),
+('Harry', 'M', '1998-01-30', 'Dharan', 27000.00, 10, 5);
+
+
+UPDATE Office SET Onumber = 6 WHERE Onumber = 45;
+UPDATE Office SET Onumber = 7 WHERE Onumber = 46;
+UPDATE Office SET Onumber = 8 WHERE Onumber = 47;
+UPDATE Office SET Onumber = 9 WHERE Onumber = 48;
+UPDATE Office SET Onumber = 10 WHERE Onumber = 49;
+
+
+INSERT INTO Project (Pnumber, Pname, Proj_location, Onumber)
+VALUES
+(6, 'InventorySystem', 'Kathmandu', 6),
+(7, 'EcommerceSite', 'Pokhara', 7),
+(8, 'SchoolPortal', 'Butwal', 8),
+(9, 'HospitalApp', 'Biratnagar', 9),
+(10, 'BankSecurity', 'Dharan', 10);
+
+
+INSERT INTO Works_on (ESSN, Pno)
+VALUES
+(45, 6),
+(46, 7),
+(47, 8),
+(48, 9),
+(49, 10);
+
+
+INSERT INTO Dependents (Dname, Dage, SSN, Drelation)
+VALUES
+('roma', 12, 45, 'Mother'),
+('dipu', 10, 46, 'Brother'),
+('Anu', 10, 47, 'Daughter'),
+('Ravi', 14, 48, 'Son'),
+('Saru', 13, 49, 'Sister');
+
+
+CREATE TABLE PF (
+    PFID INT AUTO_INCREMENT PRIMARY KEY,
+    SSN INT(10) UNSIGNED,
+    PFCategoryName VARCHAR(50),
+    Amount DECIMAL(10,2),
+    Start_date DATE,
+    Remarks VARCHAR(100),
+    CONSTRAINT fk_pf_emp FOREIGN KEY (SSN)
+        REFERENCES Employee(SSN)
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
+);
+
+
+ALTER TABLE Employee
+ADD COLUMN Marital_status VARCHAR(20);
+
+
+UPDATE Employee SET Marital_status = 'Married' WHERE SSN IN (41, 42, 43);
+UPDATE Employee SET Marital_status = 'Single' WHERE SSN IN (44, 40, 46, 47);
+UPDATE Employee SET Marital_status = 'Divorced' WHERE SSN IN (45, 48, 49);
+
+SELECT SSN, Ename, Marital_status FROM Employee;
+
+
+
+INSERT INTO PF (SSN, PFCategoryName, Amount, Start_date, Remarks)
+VALUES
+(40, 'Retirement Fund', 5000.00, '2023-01-10', 'Monthly contribution'),
+(41, 'Health Insurance', 2500.00, '2023-03-15', 'Includes family'),
+(42, 'Provident Fund', 4000.00, '2023-02-01', NULL),
+(43, 'Bonus PF', 3000.00, '2023-05-20', 'Performance bonus'),
+(44, 'Pension Plan', 6000.00, '2023-01-05', NULL),
+(45, 'Health Scheme', 2000.00, '2023-04-10', 'Employee only'),
+(46, 'Retirement Fund', 5500.00, '2023-03-12', 'Monthly deduction'),
+(47, 'Provident Fund', 3500.00, '2023-06-25', 'Includes spouse'),
+(48, 'Health Coverage', 2800.00, '2023-02-14', 'Medical plan'),
+(49, 'Bonus PF', 3200.00, '2023-07-01', 'Quarterly reward');
+
+
+SELECT * FROM PF;
+
+SELECT * FROM PF WHERE Remarks IS NULL;
+
+
+SELECT * FROM employee;
+
+
+
+SELECT *
+FROM Employee
+WHERE Salary > 30000
+ORDER BY Ename DESC;
+
+
+SELECT *
+FROM Project
+ORDER BY Pname ASC;
+
+SELECT *
+FROM Employee
+WHERE Salary > 30000
+  AND Years_of_experience < 3;
+
+SELECT Ename, Address, Salary
+FROM Employee
+WHERE Salary > 30000
+   OR Years_of_experience < 3;
+
+
+SELECT * FROM dependents;
+
+
+SELECT Dname, Dage
+FROM Dependents
+WHERE Dage BETWEEN 5 AND 60;
+
+
+
+SELECT *
+FROM Office
+WHERE Oname LIKE '%Nt%';
+
+
+SELECT *
+FROM Office
+WHERE Onumber IN (1, 2, 3);
+
+
+SELECT *
+FROM PF
+WHERE Remarks IS NULL;
+
+
+SELECT PFCategoryName, Amount, Start_date, Remarks
+FROM PF
+WHERE Remarks IS NOT NULL;
+
+
+
+SELECT *
+FROM PF
+LIMIT 5;
+
+
+SELECT PFCategoryName
+FROM PF
+WHERE Amount <> 3000;
+
+
+SELECT E.*
+FROM Employee E
+JOIN Works_on W ON E.SSN = W.ESSN
+WHERE W.Pno = 2;
