@@ -1,0 +1,129 @@
+DELIMITER //
+
+CREATE PROCEDURE GetEmployee()
+BEGIN
+    SELECT Ename, Bdate, Address
+    FROM Employee;
+END //
+
+DELIMITER ;
+
+CALL GetEmployee();
+
+
+DELIMITER //
+
+CREATE PROCEDURE GetPFByAmount(IN amt DECIMAL(10,2))
+BEGIN
+    SELECT PFCategoryName, Amount, Start_date
+    FROM PF
+    WHERE Amount > amt;
+END //
+
+DELIMITER ;
+
+CALL GetPFByAmount(1000);
+CALL GetPFByAmount(3000);
+
+
+DELIMITER //
+
+CREATE PROCEDURE CountPFByAmount(
+    IN amt DECIMAL(10,2),
+    OUT total INT
+)
+BEGIN
+    SELECT COUNT(*) INTO total
+    FROM PF
+    WHERE Amount = amt;
+END //
+
+DELIMITER ;
+
+    CALL CountPFByAmount(4000, @total);
+SELECT @total AS Total_PF_Records;
+
+
+CALL CountPFByAmount(3000, @total);
+SELECT @total AS Total_PF_Records;
+
+
+DELIMITER //
+
+CREATE TRIGGER before_employee_insert
+BEFORE INSERT ON Employee
+FOR EACH ROW
+BEGIN
+    IF NEW.Salary IS NULL OR NEW.Salary = 0 THEN
+        SET NEW.Salary = 20000;
+    END IF;
+END //
+
+DELIMITER ;
+
+INSERT INTO Employee (Ename, Gender, Bdate, Address, Salary, Ono, Years_of_experience)
+VALUES ('Sujan', 'M', '2001-07-14', 'Pokhara', 0, 2, 3);
+
+SELECT * FROM Employee WHERE Ename = 'Sujan';
+
+
+
+DELIMITER //
+
+CREATE TRIGGER after_employee_insert
+AFTER INSERT ON Employee
+FOR EACH ROW
+BEGIN
+    INSERT INTO Employee_Log (EmpName, Action)
+    VALUES (NEW.Ename, 'New employee inserted');
+END //
+
+DELIMITER ;
+
+
+INSERT INTO Employee (Ename, Gender, Bdate, Address, Salary, Ono, Years_of_experience)
+VALUES ('Ramesh', 'M', '2000-02-05', 'Lalitpur', 35000, 2, 4);
+
+SELECT * FROM Employee_Log;
+    
+
+
+
+
+DELIMITER //
+
+CREATE TRIGGER before_employee_delete
+BEFORE DELETE ON Employee
+FOR EACH ROW
+BEGIN
+    INSERT INTO Employee_Log (EmpName, Action)
+    VALUES (OLD.Ename, 'Employee record is about to be deleted');
+END //
+
+DELIMITER ;
+
+
+DELETE FROM Employee
+WHERE Ename = 'Sujan';
+
+SELECT * FROM Employee_Log;
+
+
+
+DELIMITER //
+
+CREATE TRIGGER after_employee_delete
+AFTER DELETE ON Employee
+FOR EACH ROW
+BEGIN
+    INSERT INTO Employee_Log (EmpName, Action)
+    VALUES (OLD.Ename, 'Employee record deleted successfully');
+END //
+
+DELIMITER ;
+
+
+DELETE FROM Employee
+WHERE Ename = 'Ramesh';
+
+SELECT * FROM Employee_Log;

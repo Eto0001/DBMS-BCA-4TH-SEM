@@ -1,0 +1,65 @@
+CREATE VIEW Emp_details AS
+SELECT * FROM Employee;
+
+SHOW FULL TABLES WHERE table_type = 'VIEW';
+
+
+
+SHOW FULL TABLES;
+
+
+
+SELECT Ename, Gender, Address
+FROM Emp_details;
+
+
+
+UPDATE Emp_details
+SET Address = 'Ktm'
+WHERE Address = 'Kathmandu';
+
+SELECT Ename, Address
+FROM Emp_details
+WHERE Address = 'Ktm';
+
+
+
+DELETE FROM Emp_details
+WHERE Address = 'Ktm';
+
+SELECT * FROM Emp_details
+WHERE Address = 'Ktm';
+
+
+
+CREATE VIEW Emp_Name AS
+SELECT Ename
+FROM Emp_details;
+
+SELECT * FROM Emp_Name;
+
+
+
+SELECT * FROM Emp_Name;
+
+
+
+
+CREATE VIEW Emp_stat AS
+SELECT Marital_status AS Status, SUM(Salary) AS Total_Salary
+FROM Employee
+GROUP BY Marital_status;
+
+SELECT * FROM Emp_stat;
+
+
+UPDATE Emp_stat
+SET Total_Salary = 50000
+WHERE Status = 'Married';
+
+
+
+DROP VIEW Emp_Name;
+
+SHOW FULL TABLES WHERE table_type = 'VIEW';
+

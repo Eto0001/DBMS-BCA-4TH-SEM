@@ -1,0 +1,70 @@
+USE prem_40_company;
+
+SELECT Employee.Ename AS Employee_Name, Dependents.Dname AS Dependent_Name
+FROM Employee, Dependents
+WHERE Employee.SSN = Dependents.SSN;
+
+
+SELECT Employee.Ename AS Employee_Name, Dependents.Dname AS Dependent_Name
+FROM Employee, Dependents
+WHERE Employee.SSN = Dependents.SSN
+ORDER BY Dependents.Dname ASC;
+
+SELECT E.Ename AS Employee_Name, P.Pname AS Project_Name
+FROM Employee E
+JOIN Works_on W ON E.SSN = W.ESSN
+JOIN Project P ON W.Pno = P.Pnumber;
+
+
+SELECT E.Ename AS Employee_Name, E.Salary, P.PFCategoryName, P.Amount
+FROM Employee E
+INNER JOIN PF P ON E.SSN = P.SSN
+WHERE E.Salary > P.Amount;
+
+
+SELECT O.Onumber AS Office_No, O.Oname AS Office_Name, P.Pnumber AS Project_No, P.Pname AS Project_Name
+FROM Office O
+LEFT JOIN Project P ON O.Onumber = P.Onumber;
+
+SELECT O.Onumber AS Office_No, O.Oname AS Office_Name, P.Pnumber AS Project_No, P.Pname AS Project_Name
+FROM Office O
+RIGHT JOIN Project P ON O.Onumber = P.Onumber;
+
+
+SELECT E.SSN AS Employee_ID, E.Ename AS Employee_Name, P.PFID, P.PFCategoryName, P.Amount
+FROM Employee E
+CROSS JOIN PF P
+LIMIT 10;
+
+
+SELECT *
+FROM Employee
+NATURAL JOIN PF;
+
+
+SELECT Marital_status, COUNT(*) AS Number_of_Employees
+FROM Employee
+GROUP BY Marital_status;
+
+
+SELECT Marital_status, COUNT(*) AS Number_of_Employees
+FROM Employee
+GROUP BY Marital_status
+HAVING Marital_status = 'Married' OR Marital_status = 'Single';
+
+
+SELECT Pname AS Project_Name, Proj_location AS Project_Location
+FROM Project
+WHERE Onumber IN (
+    SELECT Onumber
+    FROM Office
+    WHERE Country IN ('Nepal', 'India')
+);
+
+
+SELECT Ename AS name, Gender
+FROM (
+    SELECT * 
+    FROM Employee
+    WHERE Salary > 20000
+) AS temp_emp;

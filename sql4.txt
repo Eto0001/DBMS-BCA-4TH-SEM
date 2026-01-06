@@ -1,0 +1,74 @@
+CREATE TABLE Teacher (
+    Id INT PRIMARY KEY,
+    Tname VARCHAR(20)
+);
+
+CREATE TABLE Student (
+    Id INT PRIMARY KEY,
+    Sname VARCHAR(20)
+);
+
+
+INSERT INTO Teacher (Id, Tname)
+VALUES 
+(1, 'Roshan'),
+(2, 'Basanta'),
+(3, 'Jagdish');
+
+
+INSERT INTO Student (Id, Sname)
+VALUES 
+(2, 'Prem'),
+(3, 'Ridesh'),
+(4, 'Prasun');
+
+
+SELECT Tname AS Name FROM Teacher
+UNION
+SELECT Sname FROM Student;
+
+
+SELECT DISTINCT T.Tname AS Common_Name
+FROM Teacher T
+INNER JOIN Student S
+ON T.Tname = S.Sname;
+
+
+SELECT DISTINCT Tname AS Common_Name
+FROM Teacher
+WHERE Tname IN (SELECT Sname FROM Student);
+
+
+SELECT DISTINCT T.Tname AS Only_Teacher
+FROM Teacher T
+LEFT JOIN Student S
+ON T.Tname = S.Sname
+WHERE S.Sname IS NULL;
+
+
+
+USE prem_40_company;
+SELECT COUNT(*) AS Number_of_Offices
+FROM Office;
+
+
+SELECT COUNT(DISTINCT Ename) AS Distinct_Employee_Names
+FROM Employee;
+
+
+SELECT SUM(Salary) AS Total_Salary
+FROM Employee;
+
+
+SELECT AVG(Salary) AS Average_Salary
+FROM Employee;
+
+
+SELECT MAX(Amount) AS Maximum_PF_Amount
+FROM PF;
+
+
+SELECT MIN(Amount) AS Minimum_PF_Amount
+FROM PF;
+
+
